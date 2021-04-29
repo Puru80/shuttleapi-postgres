@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: shuttle-postgres
+        image: shuttleavr.azurecr.io/postgres-0:v1
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        - name: POSTGRES_USER
+          value: "postgres"
+        -name: POSTGRES_PASSWORD
+          value: "password"
+        ports:
+        - containerPort: 5432
+          name: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  ports:
+  - port: 5432
+  selector:
+    app: postgres
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shuttleapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shuttleapi
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: shuttleapi
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: shuttleapi
+        image: shuttleavr.azurecr.io/shuttle-docker-postgres:v1
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: POSTGRES
+          value: "postgres"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shuttleapi
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: shuttleapi
