@@ -48,7 +48,7 @@ public class RegistrationService
 //            finalToken.append(i);
 //        }
 
-        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+        String link = "http://shuttleres-0.herokuapp.com/api/v1/registration/confirm?token=" + token;
 //        emailSender.sendEmail(
 //                request.getEmail(),
 //                buildEmail(request.getFirstName(), link));
@@ -59,8 +59,8 @@ public class RegistrationService
         mailMessage.setSubject("Confirm Registration");
         mailMessage.setFrom("no-reply@shuttleservice.com");
 //        mailMessage.setText(buildEmail(request.getFirstName(), link));
-        mailMessage.setText("Click this link to verify your account : " + token
-            + "\n Valid for 5 min");
+        mailMessage.setText("Click this link to verify your account : \n" + link
+            + "\n \n Valid for 5 min");
         emailSender.sendEmail(mailMessage);
 
         return token;
