@@ -22,7 +22,7 @@ public class RegistrationController
     }
 
     @GetMapping(path = "/login")
-    @ResponseStatus(HttpStatus.LOCKED)
+    @ResponseStatus(HttpStatus.OK)
     public String logIn(@RequestParam("email") String email, @RequestParam("password") String password)
     {
         return registrationService.login(email, password);
