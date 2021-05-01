@@ -4,6 +4,7 @@ import com.example.shuttleapi.appuser.AppUser;
 import com.example.shuttleapi.ticket.TicketRequest;
 import com.example.shuttleapi.ticket.TicketService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,6 +22,7 @@ public class RegistrationController
     }
 
     @GetMapping(path = "/login")
+    @ResponseStatus(HttpStatus.LOCKED)
     public String logIn(@RequestParam("email") String email, @RequestParam("password") String password)
     {
         return registrationService.login(email, password);
