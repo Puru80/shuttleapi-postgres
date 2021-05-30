@@ -1,6 +1,7 @@
 package com.example.shuttleapi.registration;
 
 import com.example.shuttleapi.appuser.AppUser;
+import com.example.shuttleapi.exception.ApiRequestException;
 import com.example.shuttleapi.ticket.TicketRequest;
 import com.example.shuttleapi.ticket.TicketService;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ public class RegistrationController
     @PostMapping
     public String register(@RequestBody RegistrationRequest request)
     {
+//        throw new ApiRequestException("Testing Exception");
         return registrationService.register(request);
     }
 

@@ -1,5 +1,6 @@
 package com.example.shuttleapi.appuser;
 
+import com.example.shuttleapi.exception.ApiRequestException;
 import com.example.shuttleapi.registration.token.ConfirmationToken;
 import com.example.shuttleapi.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
@@ -41,7 +42,7 @@ public class AppUserService implements UserDetailsService
         boolean exists = appUserRepository.findByEmail(appUser.getEmail())
                 .isPresent();
         if(exists)
-            throw new IllegalStateException("Email already taken");
+            throw new ApiRequestException("Email Already taken");
 
         String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
         appUser.setPassword(encodedPassword);

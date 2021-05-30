@@ -11,6 +11,6 @@ public class EmailValidator implements Predicate<String> {
     public boolean test(String s)
     {
 //        TODO: Regex to validate email
-        return true;
+        return s.length() >= 10;
     }
 }

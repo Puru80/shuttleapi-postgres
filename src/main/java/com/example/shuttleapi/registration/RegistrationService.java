@@ -3,6 +3,7 @@ package com.example.shuttleapi.registration;
 import com.example.shuttleapi.appuser.AppUser;
 import com.example.shuttleapi.appuser.AppUserRole;
 import com.example.shuttleapi.appuser.AppUserService;
+import com.example.shuttleapi.exception.ApiRequestException;
 import com.example.shuttleapi.registration.token.ConfirmationToken;
 import com.example.shuttleapi.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class RegistrationService
                 test(request.getEmail());
 
         if (!isValidEmail) {
-            throw new IllegalStateException("email not valid");
+            throw new ApiRequestException("Invalid Email");
         }
 
         String token = appUserService.signUpUser(
@@ -48,7 +49,7 @@ public class RegistrationService
 //            finalToken.append(i);
 //        }
 
-        String link = "http://shuttleres-0.herokuapp.com/api/v1/registration/confirm?token=" + token;
+        String link = "https://shuttleres-0.herokuapp.com/api/v1/registration/confirm?token=" + token;
 //        emailSender.sendEmail(
 //                request.getEmail(),
 //                buildEmail(request.getFirstName(), link));
