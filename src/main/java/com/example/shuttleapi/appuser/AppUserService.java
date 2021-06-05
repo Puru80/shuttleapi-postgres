@@ -42,7 +42,7 @@ public class AppUserService implements UserDetailsService
         boolean exists = appUserRepository.findByEmail(appUser.getEmail())
                 .isPresent();
         if(exists)
-            throw new ApiRequestException("Email Already taken");
+            throw new IllegalArgumentException("Email Already taken");
 
         String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
         appUser.setPassword(encodedPassword);
@@ -63,19 +63,12 @@ public class AppUserService implements UserDetailsService
 
     public boolean signIn(String email, String password)
     {
-//        String decodedPassword = bCryptPasswordEncoder.matches(password, appuser)
         AppUser appUser = appUserRepository.getAppUserByEmail(email);
 
         if(appUser==null)
             throw new IllegalStateException("Email not found");
         else if(!appUserRepository.isEnabled(email))
             throw new IllegalStateException("Email not confirmed");
-
-//        if(!encodedPassword.equals(appUser.getPassword()))
-//            throw new IllegalStateException("Password incorrect");
-
-//        String encodedPassword = bCryptPasswordEncoder.encode(password);
-//        AppUser user = appUserRepository.findByEmailAndPassword(email, encodedPassword);
 
         return bCryptPasswordEncoder.matches(password, appUser.getPassword());
 

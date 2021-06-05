@@ -1,11 +1,13 @@
 package com.example.shuttleapi.registration;
 
+import com.example.shuttleapi.ShuttleResponse;
 import com.example.shuttleapi.appuser.AppUser;
 import com.example.shuttleapi.exception.ApiRequestException;
 import com.example.shuttleapi.ticket.TicketRequest;
 import com.example.shuttleapi.ticket.TicketService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,10 +19,10 @@ public class RegistrationController
     private final TicketService ticketService;
 
     @PostMapping
-    public String register(@RequestBody RegistrationRequest request)
+    public ResponseEntity<ShuttleResponse> register(@RequestBody RegistrationRequest request)
     {
-//        throw new ApiRequestException("Testing Exception");
-        return registrationService.register(request);
+        return new ResponseEntity<ShuttleResponse>(new ShuttleResponse("User Registered",
+                registrationService.register(request)), HttpStatus.OK);
     }
 
     @GetMapping(path = "/login")

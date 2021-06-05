@@ -10,13 +10,10 @@ import java.util.List;
 @AllArgsConstructor
 public class TicketService
 {
-//    private final Ticket ticket;
     private final TicketRepository ticketRepository;
-//    private final AppUserService appUserService;
 
     public String saveTicket(TicketRequest ticket)
     {
-//        AppUser appUser = appUserService.findByUserEmail(ticket.getEmail());
         ticketRepository.save(new Ticket(
                 ticket.getDestination(),
                 ticket.getSeats(),

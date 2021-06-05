@@ -42,19 +42,9 @@ public class RegistrationService
         );
 
         //TODO: Token management
-//        StringBuilder finalToken = new StringBuilder();
-//
-//        for(int i=token.length()-6;i<token.length();i++)
-//        {
-//            finalToken.append(i);
-//        }
 
         String link = "https://shuttleres-0.herokuapp.com/api/v1/registration/confirm?token=" + token;
-//        emailSender.sendEmail(
-//                request.getEmail(),
-//                buildEmail(request.getFirstName(), link));
 
-        //Sending verification email
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(request.getEmail());
         mailMessage.setSubject("Confirm Registration");
@@ -185,10 +175,4 @@ public class RegistrationService
         return appUserService.findByUserEmail(email);
     }
 
-/*
-    public String signUpUser(AppUser appUser)
-    {
-        return  "";
-    }
-*/
 }
