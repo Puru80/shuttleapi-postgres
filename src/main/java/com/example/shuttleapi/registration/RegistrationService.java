@@ -66,8 +66,6 @@ public class RegistrationService
         }
 
         return "Incorrect Password";
-
-//        return appUserService.signIn(email, password);
     }
 
     public String logout(String email)
