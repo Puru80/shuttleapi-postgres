@@ -6,6 +6,7 @@ import com.example.shuttleapi.appuser.AppUserService;
 import com.example.shuttleapi.exception.ApiRequestException;
 import com.example.shuttleapi.registration.token.ConfirmationToken;
 import com.example.shuttleapi.registration.token.ConfirmationTokenService;
+import com.example.shuttleapi.utility.EmailValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class RegistrationService
                 )
         );
 
-        //TODO: Token management
+        //TODO: Token regeneration
 
         String link = "https://shuttleres-0.herokuapp.com/api/v1/registration/confirm?token=" + token;
 
@@ -50,7 +51,7 @@ public class RegistrationService
         mailMessage.setSubject("Confirm Registration");
         mailMessage.setFrom("no-reply@shuttleservice.com");
 //        mailMessage.setText(buildEmail(request.getFirstName(), link));
-        mailMessage.setText("Click this link to verify your account : \n" + link
+        mailMessage.setText("Your One Time Password for email verification : \n" + token
             + "\n \n Valid for 5 min");
         emailSender.sendEmail(mailMessage);
 
@@ -80,7 +81,7 @@ public class RegistrationService
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow(() ->
-                        new IllegalStateException("token not found"));
+                        new IllegalArgumentException("token not found"));
 
         if (confirmationToken.getConfirmedAt() != null) {
             throw new IllegalStateException("email already confirmed");

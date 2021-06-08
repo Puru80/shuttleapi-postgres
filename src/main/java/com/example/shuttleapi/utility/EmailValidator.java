@@ -1,4 +1,4 @@
-package com.example.shuttleapi.registration;
+package com.example.shuttleapi.utility;
 
 import org.springframework.stereotype.Service;
 ;

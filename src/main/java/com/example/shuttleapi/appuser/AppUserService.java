@@ -3,6 +3,7 @@ package com.example.shuttleapi.appuser;
 import com.example.shuttleapi.exception.ApiRequestException;
 import com.example.shuttleapi.registration.token.ConfirmationToken;
 import com.example.shuttleapi.registration.token.ConfirmationTokenService;
+import com.example.shuttleapi.utility.OtpGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -49,7 +50,7 @@ public class AppUserService implements UserDetailsService
 
         appUserRepository.save(appUser);
 
-        String token = UUID.randomUUID().toString();
+        String token = new OtpGenerator().generateOtp((int) (Math.random()));
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
