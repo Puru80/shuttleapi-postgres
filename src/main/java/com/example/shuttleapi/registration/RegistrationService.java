@@ -62,7 +62,7 @@ public class RegistrationService
     {
         if(appUserService.signIn(email, password))
         {
-            appUserService.lockAppUser(email);
+            appUserService.unlockAppUser(email);
             return "SignIn Successful";
         }
 
@@ -71,7 +71,7 @@ public class RegistrationService
 
     public String logout(String email)
     {
-        appUserService.unlockAppUser(email);
+        appUserService.lockAppUser(email);
         return "Successfully Signed Out";
     }
 

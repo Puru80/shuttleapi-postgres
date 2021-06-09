@@ -67,9 +67,9 @@ public class AppUserService implements UserDetailsService
         AppUser appUser = appUserRepository.getAppUserByEmail(email);
 
         if(appUser==null)
-            throw new IllegalStateException("Email not found");
+            throw new IllegalArgumentException("Email not found");
         else if(!appUserRepository.isEnabled(email))
-            throw new IllegalStateException("Email not confirmed");
+            throw new IllegalArgumentException("Email not confirmed");
 
         return bCryptPasswordEncoder.matches(password, appUser.getPassword());
 

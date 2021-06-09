@@ -18,6 +18,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 {
     private final AppUserService appUserService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -26,6 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .permitAll()
 //                .antMatchers("/api/v*/confirm").permitAll()
                 .antMatchers("/api/v*/ticket/**").permitAll()
+                .antMatchers("/swagger-ui.html#").permitAll()
                 .anyRequest().authenticated().and().formLogin();
 //        http.authorizeRequests()
 //                .antMatchers("/api/v*/registration/**").permitAll()
