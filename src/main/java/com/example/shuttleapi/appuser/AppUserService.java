@@ -50,7 +50,8 @@ public class AppUserService implements UserDetailsService
 
         appUserRepository.save(appUser);
 
-        String token = new OtpGenerator().generateOtp((int) (Math.random()));
+        String token = new OtpGenerator().generateOtp(new Random().nextInt(11));
+
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
