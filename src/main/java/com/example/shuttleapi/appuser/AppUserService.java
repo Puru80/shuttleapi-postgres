@@ -1,6 +1,5 @@
 package com.example.shuttleapi.appuser;
 
-import com.example.shuttleapi.exception.ApiRequestException;
 import com.example.shuttleapi.registration.token.ConfirmationToken;
 import com.example.shuttleapi.registration.token.ConfirmationTokenService;
 import com.example.shuttleapi.utility.OtpGenerator;
@@ -40,10 +39,12 @@ public class AppUserService implements UserDetailsService
 
     public String signUpUser(AppUser appUser)
     {
-        boolean exists = appUserRepository.findByEmail(appUser.getEmail())
-                .isPresent();
-        if(exists)
+        AppUser user = appUserRepository.getAppUserByEmail(appUser.getEmail());
+        if(user!=null && user.isEnabled())
             throw new IllegalArgumentException("Email Already taken");
+        else if(user!=null && !user.isEnabled()) {
+            return generateToken(appUser);
+        }
 
         String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
         appUser.setPassword(encodedPassword);
@@ -51,7 +52,6 @@ public class AppUserService implements UserDetailsService
         appUserRepository.save(appUser);
 
         String token = new OtpGenerator().generateOtp(new Random().nextInt(11));
-
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
@@ -74,6 +74,18 @@ public class AppUserService implements UserDetailsService
 
         return bCryptPasswordEncoder.matches(password, appUser.getPassword());
 
+    }
+
+    public String generateToken(AppUser appUser){
+        String token = new OtpGenerator().generateOtp(new Random().nextInt(11));
+        confirmationTokenService.saveConfirmationToken(new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(5),
+                appUser
+        ));
+
+        return token;
     }
 
     public void lockAppUser(String email)

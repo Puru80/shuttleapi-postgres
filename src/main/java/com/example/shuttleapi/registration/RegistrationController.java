@@ -43,4 +43,9 @@ public class RegistrationController
         return new ResponseEntity<>(new ShuttleResponse("SignOut Successful",
                 registrationService.confirmToken(token)), HttpStatus.OK);
     }
+
+    @GetMapping(path = "/generateToken")
+    public ResponseEntity<ShuttleResponse> generateToken(){
+        return null;
+    }
 }

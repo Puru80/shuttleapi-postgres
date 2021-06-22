@@ -16,15 +16,14 @@ import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
-public class RegistrationService
-{
+public class RegistrationService {
+
     private final EmailValidator emailValidator;
     private final AppUserService appUserService;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSenderService emailSender;
 
-    public String register(RegistrationRequest request)
-    {
+    public String register(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.
                 test(request.getEmail());
 
@@ -42,10 +41,6 @@ public class RegistrationService
                 )
         );
 
-        //TODO: Token regeneration
-
-        String link = "https://shuttleres-0.herokuapp.com/api/v1/registration/confirm?token=" + token;
-
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(request.getEmail());
         mailMessage.setSubject("Confirm Registration");
@@ -58,26 +53,22 @@ public class RegistrationService
         return token;
     }
 
-    public String login(String email, String password)
-    {
-        if(appUserService.signIn(email, password))
-        {
+    public String login(String email, String password) {
+        if(appUserService.signIn(email, password)) {
             appUserService.unlockAppUser(email);
             return "SignIn Successful";
         }
-
-        return "Incorrect Password";
+        else
+            throw new IllegalArgumentException("Incorrect Password");
     }
 
-    public String logout(String email)
-    {
+    public String logout(String email) {
         appUserService.lockAppUser(email);
         return "Successfully Signed Out";
     }
 
     @Transactional
-    public String confirmToken(String token)
-    {
+    public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow(() ->
