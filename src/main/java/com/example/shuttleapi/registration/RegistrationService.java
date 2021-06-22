@@ -84,7 +84,7 @@ public class RegistrationService {
             throw new IllegalStateException("Token expired");
         }
 
-        confirmationTokenService.setConfirmedAt(token);
+        confirmationTokenService.setConfirmedAt(LocalDateTime.now().toString());
         appUserService.enableAppUser(
                 confirmationToken.getAppUser().getEmail());
 

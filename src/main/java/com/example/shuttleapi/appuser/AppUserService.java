@@ -43,6 +43,7 @@ public class AppUserService implements UserDetailsService
         if(user!=null && user.isEnabled())
             throw new IllegalArgumentException("Email Already taken");
         else if(user!=null && !user.isEnabled()) {
+            appUserRepository.save(appUser);
             return generateToken(appUser);
         }
 

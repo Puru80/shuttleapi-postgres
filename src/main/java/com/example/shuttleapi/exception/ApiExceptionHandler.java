@@ -32,7 +32,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ShuttleResponse> handleException(IllegalArgumentException ex, WebRequest webRequest)
+    public ResponseEntity<ShuttleResponse> handleExceptionArgument(IllegalArgumentException ex, WebRequest webRequest)
+    {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        ApiException apiException = new ApiException(
+                ex.getMessage(),
+                httpStatus.value(),
+                httpStatus.getReasonPhrase(),
+                ZonedDateTime.now(ZoneId.of("Asia/Kolkata"))
+        );
+
+        return new ResponseEntity<ShuttleResponse>(new ShuttleResponse("Bad Request", apiException),
+                httpStatus);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ShuttleResponse> handleExceptionState(IllegalStateException ex, WebRequest webRequest)
     {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
         ApiException apiException = new ApiException(
