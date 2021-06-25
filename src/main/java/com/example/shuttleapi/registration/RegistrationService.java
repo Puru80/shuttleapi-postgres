@@ -160,13 +160,8 @@ public class RegistrationService {
                 "</div></div>";
     }
 
-    public AppUser getUser(String email)
-    {
-        AppUser user = appUserService.findByUserEmail(email);
-        if(user!=null)
-            return appUserService.findByUserEmail(email);
-        else
-            throw new IllegalArgumentException("User Does not Exist");
+    public AppUser getUser(String email) {
+        return appUserService.findByUserEmail(email);
     }
 
 }

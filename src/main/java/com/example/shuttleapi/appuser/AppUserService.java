@@ -33,8 +33,7 @@ public class AppUserService implements UserDetailsService
     public AppUser findByUserEmail(String email)
     {
         return appUserRepository.findByEmail(email).
-                orElseThrow(() -> new UsernameNotFoundException(String .format(
-                        USER_NOT_FOUND_MSG, email)));
+                orElseThrow(() -> new IllegalArgumentException("User Not found"));
     }
 
     public String signUpUser(AppUser appUser)
