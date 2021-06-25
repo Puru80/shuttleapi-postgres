@@ -162,7 +162,11 @@ public class RegistrationService {
 
     public AppUser getUser(String email)
     {
-        return appUserService.findByUserEmail(email);
+        AppUser user = appUserService.findByUserEmail(email);
+        if(user!=null)
+            return appUserService.findByUserEmail(email);
+        else
+            throw new IllegalArgumentException("User Does not Exist");
     }
 
 }
