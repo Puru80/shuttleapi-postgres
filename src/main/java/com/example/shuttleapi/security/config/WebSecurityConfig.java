@@ -26,7 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/api/v*/registration/**")
                 .permitAll()
                 .antMatchers("/api/v*/ticket/**").permitAll()
-                .antMatchers("/swagger-ui").permitAll()
+                .antMatchers("/swagger-ui/").permitAll()
                 .anyRequest().authenticated().and().formLogin();
 //        http.authorizeRequests()
 //                .antMatchers("/api/v*/registration/**").permitAll()
