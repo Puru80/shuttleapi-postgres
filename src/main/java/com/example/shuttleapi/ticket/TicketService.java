@@ -36,13 +36,13 @@ public class TicketService
         return "Success";
     }
 
-    public List<Ticket> getTickets(String email)
-    {
+    public List<Ticket> getTickets(String email){
         return ticketRepository.getTicketsByEmail(email);
     }
 
-    public void isPaymentStatus(Long id)
-    {
+    public String isPaymentStatus(Long id) {
         ticketRepository.updatePaymentStatus(id);
+
+        return "Payment Status Updated";
     }
 }
