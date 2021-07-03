@@ -96,15 +96,4 @@ public class AppUser implements UserDetails
     public boolean isEnabled() {
         return enabled;
     }
-
-//    @OneToMany(mappedBy = "appUser")
-//    private Collection<Ticket> ticket;
-
-//    public Collection<Ticket> getTicket() {
-//        return ticket;
-//    }
-//
-//    public void setTicket(Collection<Ticket> ticket) {
-//        this.ticket = ticket;
-//    }
 }

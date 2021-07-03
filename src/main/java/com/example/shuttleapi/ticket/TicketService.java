@@ -1,5 +1,7 @@
 package com.example.shuttleapi.ticket;
 
+import com.example.shuttleapi.appuser.AppUser;
+import com.example.shuttleapi.appuser.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +13,15 @@ import java.util.List;
 public class TicketService
 {
     private final TicketRepository ticketRepository;
+    private final AppUserService appUserService;
 
     public String saveTicket(TicketRequest ticket)
     {
+        AppUser user = appUserService.findByUserEmail(ticket.getEmail());
+
+        if(user==null)
+            throw new IllegalArgumentException("User Not Found");
+
         ticketRepository.save(new Ticket(
                 ticket.getDestination(),
                 ticket.getSeats(),
