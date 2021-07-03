@@ -28,6 +28,7 @@ public class Ticket
     private Long id;
     private String destination;
     private long seats;
+    private String timing;
     private LocalDateTime timeOfBooking;
     private boolean paymentStatus;
     private String userEmail;

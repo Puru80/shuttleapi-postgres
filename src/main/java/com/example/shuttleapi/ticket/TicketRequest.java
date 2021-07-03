@@ -13,5 +13,6 @@ public class TicketRequest
 {
     private final String destination;
     private final long seats;
+    private final String timing;
     private final String email;
 }
