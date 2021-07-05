@@ -39,10 +39,10 @@ public class AppUserService implements UserDetailsService
     public String signUpUser(AppUser appUser)
     {
         AppUser user = appUserRepository.getAppUserByEmail(appUser.getEmail());
+
         if(user!=null && user.isEnabled())
             throw new IllegalArgumentException("Email Already taken");
         else if(user!=null && !user.isEnabled()) {
-//            appUserRepository.save(appUser);
             return generateToken(user);
         }
 

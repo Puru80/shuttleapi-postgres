@@ -16,6 +16,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long>
 
     AppUser findByEmailAndPassword(String email, String password);
 
+    @Query("select a from AppUser a where a.email = ?1")
     AppUser getAppUserByEmail(String email);
 
     @Query("select a.enabled from AppUser a where a.email = ?1")
