@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.TimeZone;
 
 @Service
 @AllArgsConstructor
@@ -22,10 +24,12 @@ public class TicketService
         if(user==null)
             throw new IllegalArgumentException("User Not Found");
 
+        LocalDateTime dateTime = LocalDateTime.now(TimeZone.getDefault().toZoneId());
+
         ticketRepository.save(new Ticket(
                 ticket.getDestination(),
                 ticket.getSeats(),
-                LocalDateTime.now(),
+                dateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")),
                 false,
                 ticket.getEmail()
         ));

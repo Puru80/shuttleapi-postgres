@@ -29,16 +29,24 @@ public class Ticket
     private String destination;
     private long seats;
     private String timing;
-    private LocalDateTime timeOfBooking;
+    private String timeOfBooking;
     private boolean paymentStatus;
     private String userEmail;
 
-    public Ticket(String destination, long seats, LocalDateTime timeOfBooking,
+    /*public Ticket(String destination, long seats, LocalDateTime timeOfBooking,
                   boolean paymentStatus, String userEmail)
     {
         this.destination = destination;
         this.seats = seats;
         this.timeOfBooking = timeOfBooking;
+        this.paymentStatus = paymentStatus;
+        this.userEmail = userEmail;
+    }*/
+
+    public Ticket(String destination, long seats, String timing, boolean paymentStatus, String userEmail) {
+        this.destination = destination;
+        this.seats = seats;
+        this.timing = timing;
         this.paymentStatus = paymentStatus;
         this.userEmail = userEmail;
     }
