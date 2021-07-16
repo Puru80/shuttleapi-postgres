@@ -24,11 +24,12 @@ public class TicketService
         if(user==null)
             throw new IllegalArgumentException("User Not Found");
 
-        LocalDateTime dateTime = LocalDateTime.now(TimeZone.getDefault().toZoneId());
+        LocalDateTime dateTime = LocalDateTime.now(TimeZone.getTimeZone("Asia/Kolkata").toZoneId());
 
         ticketRepository.save(new Ticket(
                 ticket.getDestination(),
                 ticket.getSeats(),
+                ticket.getTiming(),
                 dateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")),
                 false,
                 ticket.getEmail()

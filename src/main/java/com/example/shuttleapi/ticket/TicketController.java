@@ -25,7 +25,7 @@ public class TicketController
     @DeleteMapping(path = "/cancellation")
     public ResponseEntity<ShuttleResponse> cancelTicket(@RequestParam("id") Long id)
     {
-        return new ResponseEntity<>(new ShuttleResponse("Ticket Booked",
+        return new ResponseEntity<>(new ShuttleResponse("Ticket Cancelled",
                 ticketService.cancelTicket(id)), HttpStatus.OK);
     }
 
