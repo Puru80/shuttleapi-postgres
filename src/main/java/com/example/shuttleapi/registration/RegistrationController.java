@@ -29,7 +29,7 @@ public class RegistrationController
     @GetMapping(path = "/userdetails")
     public ResponseEntity<ShuttleResponse> getUserDetails(@RequestParam("email") String email) {
         return new ResponseEntity<ShuttleResponse>(new ShuttleResponse("User details fetched",
-                registrationService.getUser(email)), HttpStatus.FOUND);
+                registrationService.getUser(email)), HttpStatus.OK);
     }
 
     @GetMapping(path = "/logout")
