@@ -27,6 +27,7 @@ public class TicketService
         LocalDateTime dateTime = LocalDateTime.now(TimeZone.getTimeZone("Asia/Kolkata").toZoneId());
 
         ticketRepository.save(new Ticket(
+                ticket.getOrigin(),
                 ticket.getDestination(),
                 ticket.getSeats(),
                 ticket.getTiming(),

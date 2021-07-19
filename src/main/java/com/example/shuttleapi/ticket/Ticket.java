@@ -26,6 +26,7 @@ public class Ticket
             generator = "ticket_sequence"
     )
     private Long id;
+    private String origin;
     private String destination;
     private long seats;
     private String timing;
@@ -33,7 +34,9 @@ public class Ticket
     private boolean paymentStatus;
     private String userEmail;
 
-    public Ticket(String destination, long seats, String timing, String timeOfBooking, boolean paymentStatus, String userEmail) {
+    public Ticket(String origin, String destination, long seats, String timing, String timeOfBooking,
+                  boolean paymentStatus, String userEmail) {
+        this.origin = origin;
         this.destination = destination;
         this.seats = seats;
         this.timing = timing;

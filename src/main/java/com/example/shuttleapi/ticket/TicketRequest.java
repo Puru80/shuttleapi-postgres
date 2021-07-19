@@ -11,6 +11,7 @@ import lombok.ToString;
 @ToString
 public class TicketRequest
 {
+    private final String origin;
     private final String destination;
     private final long seats;
     private final String timing;
