@@ -15,7 +15,6 @@ public class ShuttleapiApplication
 {
 
 	public static void main(String[] args) {
-		System.setProperty("user.timezone", "Asia/Kolkata");
 		SpringApplication.run(ShuttleapiApplication.class, args);
 	}
 
