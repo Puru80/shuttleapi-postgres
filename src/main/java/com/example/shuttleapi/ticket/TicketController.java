@@ -1,6 +1,9 @@
 package com.example.shuttleapi.ticket;
 
+import com.example.shuttleapi.ShuttleResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,28 +16,31 @@ public class TicketController
     private final TicketService ticketService;
 
     @PostMapping
-    public String bookTicket(@RequestBody TicketRequest request)
+    public ResponseEntity<ShuttleResponse> bookTicket(@RequestBody TicketRequest request)
     {
-        return ticketService.saveTicket(request);
+        return new ResponseEntity<>(new ShuttleResponse("Ticket Booked",
+                ticketService.saveTicket(request)), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/cancellation")
-    public String cancelTicket(@RequestParam("id") Long id)
+    public ResponseEntity<ShuttleResponse> cancelTicket(@RequestParam("id") Long id)
     {
-        return ticketService.cancelTicket(id);
+        return new ResponseEntity<>(new ShuttleResponse("Ticket Cancelled",
+                ticketService.cancelTicket(id)), HttpStatus.OK);
     }
 
     @GetMapping(path = "mytickets")
     @ResponseBody()
-    public List<Ticket> getTickets(@RequestParam("email") String email)
+    public ResponseEntity<ShuttleResponse> getTickets(@RequestParam("email") String email)
     {
-        return ticketService.getTickets(email);
+        return new ResponseEntity<>(new ShuttleResponse("Ticket Booked",
+                ticketService.getTickets(email)), HttpStatus.OK);
     }
 
     @PutMapping(path = "updatePaymentStatus")
-    public String updatePaymentStatus(@RequestParam("id") Long id)
+    public ResponseEntity<ShuttleResponse> updatePaymentStatus(@RequestParam("id") Long id)
     {
-        ticketService.isPaymentStatus(id);
-        return "Payment Confirmed";
+        return new ResponseEntity<>(new ShuttleResponse("Ticket Booked",
+            ticketService.isPaymentStatus(id)), HttpStatus.OK);
     }
 }

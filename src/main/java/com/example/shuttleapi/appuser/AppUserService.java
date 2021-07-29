@@ -2,6 +2,7 @@ package com.example.shuttleapi.appuser;
 
 import com.example.shuttleapi.registration.token.ConfirmationToken;
 import com.example.shuttleapi.registration.token.ConfirmationTokenService;
+import com.example.shuttleapi.utility.OtpGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,23 +33,25 @@ public class AppUserService implements UserDetailsService
     public AppUser findByUserEmail(String email)
     {
         return appUserRepository.findByEmail(email).
-                orElseThrow(() -> new UsernameNotFoundException(String .format(
-                        USER_NOT_FOUND_MSG, email)));
+                orElseThrow(() -> new IllegalArgumentException("User Not found"));
     }
 
     public String signUpUser(AppUser appUser)
     {
-        boolean exists = appUserRepository.findByEmail(appUser.getEmail())
-                .isPresent();
-        if(exists)
-            throw new IllegalStateException("Email already taken");
+        AppUser user = appUserRepository.getAppUserByEmail(appUser.getEmail());
+
+        if(user!=null && user.isEnabled())
+            throw new IllegalArgumentException("Email Already taken");
+        else if(user!=null && !user.isEnabled()) {
+            return generateToken(user);
+        }
 
         String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
         appUser.setPassword(encodedPassword);
 
         appUserRepository.save(appUser);
 
-        String token = UUID.randomUUID().toString();
+        String token = new OtpGenerator().generateOtp(new Random().nextInt(11));
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
@@ -62,22 +65,27 @@ public class AppUserService implements UserDetailsService
 
     public boolean signIn(String email, String password)
     {
-//        String decodedPassword = bCryptPasswordEncoder.matches(password, appuser)
         AppUser appUser = appUserRepository.getAppUserByEmail(email);
 
         if(appUser==null)
-            throw new IllegalStateException("Email not found");
+            throw new IllegalArgumentException("Email not found");
         else if(!appUserRepository.isEnabled(email))
-            throw new IllegalStateException("Email not confirmed");
-
-//        if(!encodedPassword.equals(appUser.getPassword()))
-//            throw new IllegalStateException("Password incorrect");
-
-//        String encodedPassword = bCryptPasswordEncoder.encode(password);
-//        AppUser user = appUserRepository.findByEmailAndPassword(email, encodedPassword);
+            throw new IllegalArgumentException("Email not confirmed");
 
         return bCryptPasswordEncoder.matches(password, appUser.getPassword());
 
+    }
+
+    public String generateToken(AppUser appUser){
+        String token = new OtpGenerator().generateOtp(new Random().nextInt(11));
+        confirmationTokenService.saveConfirmationToken(new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(5),
+                appUser
+        ));
+
+        return token;
     }
 
     public void lockAppUser(String email)

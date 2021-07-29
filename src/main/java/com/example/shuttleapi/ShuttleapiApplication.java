@@ -24,9 +24,6 @@ public class ShuttleapiApplication
 		return "Hello User";
 	}
 
-//	public void runAfterStartup()
-//	{
-//
-//	}
+
 
 }

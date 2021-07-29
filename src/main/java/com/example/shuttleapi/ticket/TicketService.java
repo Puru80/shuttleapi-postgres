@@ -1,26 +1,37 @@
 package com.example.shuttleapi.ticket;
 
+import com.example.shuttleapi.appuser.AppUser;
+import com.example.shuttleapi.appuser.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.TimeZone;
 
 @Service
 @AllArgsConstructor
 public class TicketService
 {
-//    private final Ticket ticket;
     private final TicketRepository ticketRepository;
-//    private final AppUserService appUserService;
+    private final AppUserService appUserService;
 
     public String saveTicket(TicketRequest ticket)
     {
-//        AppUser appUser = appUserService.findByUserEmail(ticket.getEmail());
+        AppUser user = appUserService.findByUserEmail(ticket.getEmail());
+
+        if(user==null)
+            throw new IllegalArgumentException("User Not Found");
+
+        LocalDateTime dateTime = LocalDateTime.now(TimeZone.getTimeZone("Asia/Kolkata").toZoneId());
+
         ticketRepository.save(new Ticket(
+                ticket.getOrigin(),
                 ticket.getDestination(),
                 ticket.getSeats(),
-                LocalDateTime.now(),
+                ticket.getTiming(),
+                dateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")),
                 false,
                 ticket.getEmail()
         ));
@@ -39,13 +50,13 @@ public class TicketService
         return "Success";
     }
 
-    public List<Ticket> getTickets(String email)
-    {
+    public List<Ticket> getTickets(String email){
         return ticketRepository.getTicketsByEmail(email);
     }
 
-    public void isPaymentStatus(Long id)
-    {
+    public String isPaymentStatus(Long id) {
         ticketRepository.updatePaymentStatus(id);
+
+        return "Payment Status Updated";
     }
 }

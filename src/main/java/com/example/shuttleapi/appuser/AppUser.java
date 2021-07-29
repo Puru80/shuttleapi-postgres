@@ -37,7 +37,7 @@ public class AppUser implements UserDetails
     private String password;
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
-    private Boolean locked = false;
+    private Boolean locked = true;
     private Boolean enabled = false;
 
     public AppUser(String firstName, String lastName, String email, String password,
@@ -48,8 +48,6 @@ public class AppUser implements UserDetails
         this.lastName = lastName;
         this.password = password;
         this.appUserRole = appUserRole;
-//        this.locked = locked;
-//        this.enabled = enabled;
     }
 
     @Override
@@ -98,15 +96,4 @@ public class AppUser implements UserDetails
     public boolean isEnabled() {
         return enabled;
     }
-
-//    @OneToMany(mappedBy = "appUser")
-//    private Collection<Ticket> ticket;
-
-//    public Collection<Ticket> getTicket() {
-//        return ticket;
-//    }
-//
-//    public void setTicket(Collection<Ticket> ticket) {
-//        this.ticket = ticket;
-//    }
 }

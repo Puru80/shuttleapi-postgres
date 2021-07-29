@@ -3,8 +3,10 @@ package com.example.shuttleapi.registration;
 import com.example.shuttleapi.appuser.AppUser;
 import com.example.shuttleapi.appuser.AppUserRole;
 import com.example.shuttleapi.appuser.AppUserService;
+import com.example.shuttleapi.exception.ApiRequestException;
 import com.example.shuttleapi.registration.token.ConfirmationToken;
 import com.example.shuttleapi.registration.token.ConfirmationTokenService;
+import com.example.shuttleapi.utility.EmailValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -14,21 +16,20 @@ import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
-public class RegistrationService
-{
+public class RegistrationService {
+
     private final EmailValidator emailValidator;
     private final AppUserService appUserService;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSenderService emailSender;
 
-    public String register(RegistrationRequest request)
-    {
-        boolean isValidEmail = emailValidator.
+    public String register(RegistrationRequest request) {
+       /* boolean isValidEmail = emailValidator.
                 test(request.getEmail());
 
         if (!isValidEmail) {
-            throw new IllegalStateException("email not valid");
-        }
+            throw new ApiRequestException("Invalid Email");
+        }*/
 
         String token = appUserService.signUpUser(
                 new AppUser(
@@ -40,58 +41,37 @@ public class RegistrationService
                 )
         );
 
-        //TODO: Token management
-//        StringBuilder finalToken = new StringBuilder();
-//
-//        for(int i=token.length()-6;i<token.length();i++)
-//        {
-//            finalToken.append(i);
-//        }
-
-        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
-//        emailSender.sendEmail(
-//                request.getEmail(),
-//                buildEmail(request.getFirstName(), link));
-
-        //Sending verification email
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(request.getEmail());
         mailMessage.setSubject("Confirm Registration");
         mailMessage.setFrom("no-reply@shuttleservice.com");
-//        mailMessage.setText(buildEmail(request.getFirstName(), link));
-        mailMessage.setText("Click this link to verify your account : " + token
-            + "\n Valid for 5 min");
+        mailMessage.setText("Your One Time Password for email verification : \n" + token
+            + "\n \n Valid for 5 min");
         emailSender.sendEmail(mailMessage);
 
         return token;
     }
 
-    public String login(String email, String password)
-    {
-        if(appUserService.signIn(email, password))
-        {
-            appUserService.lockAppUser(email);
+    public String login(String email, String password) {
+        if(appUserService.signIn(email, password)) {
+            appUserService.unlockAppUser(email);
             return "SignIn Successful";
         }
-
-        return "Incorrect Password";
-
-//        return appUserService.signIn(email, password);
+        else
+            throw new IllegalArgumentException("Incorrect Password");
     }
 
-    public String logout(String email)
-    {
-        appUserService.unlockAppUser(email);
+    public String logout(String email) {
+        appUserService.lockAppUser(email);
         return "Successfully Signed Out";
     }
 
     @Transactional
-    public String confirmToken(String token)
-    {
+    public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow(() ->
-                        new IllegalStateException("token not found"));
+                        new IllegalArgumentException("token not found"));
 
         if (confirmationToken.getConfirmedAt() != null) {
             throw new IllegalStateException("email already confirmed");
@@ -100,9 +80,10 @@ public class RegistrationService
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
         if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("token expired");
+            throw new IllegalStateException("Token expired");
         }
 
+        //TODO: Update token confirmedAt time
         confirmationTokenService.setConfirmedAt(token);
         appUserService.enableAppUser(
                 confirmationToken.getAppUser().getEmail());
@@ -179,15 +160,8 @@ public class RegistrationService
                 "</div></div>";
     }
 
-    public AppUser getUser(String email)
-    {
+    public AppUser getUser(String email) {
         return appUserService.findByUserEmail(email);
     }
 
-/*
-    public String signUpUser(AppUser appUser)
-    {
-        return  "";
-    }
-*/
 }

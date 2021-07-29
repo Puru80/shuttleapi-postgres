@@ -26,31 +26,22 @@ public class Ticket
             generator = "ticket_sequence"
     )
     private Long id;
-    //    private Long userId;
+    private String origin;
     private String destination;
     private long seats;
-    private LocalDateTime timeOfBooking;
+    private String timing;
+    private String timeOfBooking;
     private boolean paymentStatus;
-//    @ManyToOne(cascade= CascadeType.ALL)
-//    @JoinColumn(
-//            nullable = false,
-//            name = "user_email",
-//            referencedColumnName = "email"
-////            columnDefinition = "email"
-//    )
     private String userEmail;
 
-    public Ticket(String destination, long seats, LocalDateTime timeOfBooking,
-                  boolean paymentStatus, String userEmail)
-    {
+    public Ticket(String origin, String destination, long seats, String timing, String timeOfBooking,
+                  boolean paymentStatus, String userEmail) {
+        this.origin = origin;
         this.destination = destination;
         this.seats = seats;
+        this.timing = timing;
         this.timeOfBooking = timeOfBooking;
         this.paymentStatus = paymentStatus;
         this.userEmail = userEmail;
     }
-
-//    public boolean isPaymentStatus() {
-//        return paymentStatus;
-//    }
 }

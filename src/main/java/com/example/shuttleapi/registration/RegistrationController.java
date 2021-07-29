@@ -1,9 +1,9 @@
 package com.example.shuttleapi.registration;
 
-import com.example.shuttleapi.appuser.AppUser;
-import com.example.shuttleapi.ticket.TicketRequest;
-import com.example.shuttleapi.ticket.TicketService;
+import com.example.shuttleapi.ShuttleResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,37 +12,40 @@ import org.springframework.web.bind.annotation.*;
 public class RegistrationController
 {
     private final RegistrationService registrationService;
-    private final TicketService ticketService;
 
     @PostMapping
-    public String register(@RequestBody RegistrationRequest request)
-    {
-        return registrationService.register(request);
+    public ResponseEntity<ShuttleResponse> register(@RequestBody RegistrationRequest request) {
+        return new ResponseEntity<ShuttleResponse>(new ShuttleResponse("User Registered",
+                registrationService.register(request)), HttpStatus.OK);
     }
 
     @GetMapping(path = "/login")
-    public String logIn(@RequestParam("email") String email, @RequestParam("password") String password)
-    {
-        return registrationService.login(email, password);
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ShuttleResponse> logIn(@RequestParam("email") String email, @RequestParam("password") String password) {
+        return new ResponseEntity<ShuttleResponse>(new ShuttleResponse("SignIn Successful",
+                registrationService.login(email, password)), HttpStatus.OK);
     }
 
     @GetMapping(path = "/userdetails")
-    public AppUser getUserDetails(@RequestParam("email") String email)
-    {
-        return registrationService.getUser(email);
+    public ResponseEntity<ShuttleResponse> getUserDetails(@RequestParam("email") String email) {
+        return new ResponseEntity<ShuttleResponse>(new ShuttleResponse("User details fetched",
+                registrationService.getUser(email)), HttpStatus.OK);
     }
 
     @GetMapping(path = "/logout")
-    public String logOut(@RequestParam("email") String email)
-    {
-        return registrationService.logout(email);
+    public ResponseEntity<ShuttleResponse> logOut(@RequestParam("email") String email) {
+        return new ResponseEntity<>(new ShuttleResponse("SignOut Successful",
+                registrationService.logout(email)), HttpStatus.OK);
     }
 
     @GetMapping(path = "/confirm")
-    public String confirmation(@RequestParam("token") String token)
-    {
-        return registrationService.confirmToken(token);
+    public ResponseEntity<ShuttleResponse> confirmation(@RequestParam("token") String token) {
+        return new ResponseEntity<>(new ShuttleResponse("SignOut Successful",
+                registrationService.confirmToken(token)), HttpStatus.OK);
     }
 
-
+    @GetMapping(path = "/generateToken")
+    public ResponseEntity<ShuttleResponse> generateToken(){
+        return null;
+    }
 }
