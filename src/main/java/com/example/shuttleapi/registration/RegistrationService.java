@@ -24,12 +24,12 @@ public class RegistrationService {
     private final EmailSenderService emailSender;
 
     public String register(RegistrationRequest request) {
-        boolean isValidEmail = emailValidator.
+       /* boolean isValidEmail = emailValidator.
                 test(request.getEmail());
 
         if (!isValidEmail) {
             throw new ApiRequestException("Invalid Email");
-        }
+        }*/
 
         String token = appUserService.signUpUser(
                 new AppUser(
@@ -45,7 +45,6 @@ public class RegistrationService {
         mailMessage.setTo(request.getEmail());
         mailMessage.setSubject("Confirm Registration");
         mailMessage.setFrom("no-reply@shuttleservice.com");
-//        mailMessage.setText(buildEmail(request.getFirstName(), link));
         mailMessage.setText("Your One Time Password for email verification : \n" + token
             + "\n \n Valid for 5 min");
         emailSender.sendEmail(mailMessage);
@@ -84,7 +83,8 @@ public class RegistrationService {
             throw new IllegalStateException("Token expired");
         }
 
-        confirmationTokenService.setConfirmedAt(LocalDateTime.now().toString());
+        //TODO: Update token confirmedAt time
+        confirmationTokenService.setConfirmedAt(token);
         appUserService.enableAppUser(
                 confirmationToken.getAppUser().getEmail());
 

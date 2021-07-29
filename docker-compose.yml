@@ -1,25 +1,26 @@
-version: "3"
+version: "3.9"
 
 services:
   app:
-    image: shuttleavr.azurecr.io/shuttle-docker-postgres:v1
+    image: puru80/shuttle-spring-docker:latest
+    domainname: shuttleres
     build:
       context: .
     container_name: shuttle-docker
     ports:
-    - 8080:8080
+      - 8080:8080
     depends_on:
       - db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shuttleapi
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=password
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
 
   db:
-    image: shuttleavr.azurecr.io/postgres-0:v1
-    container_name: db
+    image: postgres:13.3-alpine
+    container_name: db-postgers
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_PASSWORD=pu8989ru
       - POSTGRES_DB=shuttleapi
