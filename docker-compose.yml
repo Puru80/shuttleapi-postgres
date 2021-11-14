@@ -2,20 +2,19 @@ version: "3.9"
 
 services:
   app:
-    image: puru80/shuttleres:1.0
-    domainname: shuttleres
-    build:
-      context: .
+    image: puru80/shuttleres:1.1.2
+#    build:
+#      context: .
     container_name: shuttleres-docker
     ports:
       - 8080:8080
 #    depends_on:
 #      - db
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-dev-0.postgres.database.azure.com:5432/shuttleapi
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=Puru@1812
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-dev-0.postgres.database.azure.com:5432/shuttleapi
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=Puru@1812
+#      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
 #  db:
 #    image: postgres:13.3-alpine
@@ -24,3 +23,10 @@ services:
 #      - POSTGRES_USER=postgres
 #      - POSTGRES_PASSWORD=pu8989ru
 #      - POSTGRES_DB=shuttleapi
+
+  thehairlab:
+    image: puru80/thehairlab:1.2.1
+#    build: .
+    container_name: thehairlab-docker
+    ports:
+      - 80:8000
