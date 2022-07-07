@@ -1,4 +1,4 @@
-FROM openjdk:14-jdk-alpine
+FROM openjdk:11-jdk-alpine
 LABEL maintainer="puru80"
 VOLUME /main-app
 ADD target/shuttleapi-0.0.1-SNAPSHOT.jar app.jar

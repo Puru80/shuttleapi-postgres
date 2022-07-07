@@ -40,7 +40,7 @@ public class RegistrationController
 
     @GetMapping(path = "/confirm")
     public ResponseEntity<ShuttleResponse> confirmation(@RequestParam("token") String token) {
-        return new ResponseEntity<>(new ShuttleResponse("SignOut Successful",
+        return new ResponseEntity<>(new ShuttleResponse("Email confirmation Successful",
                 registrationService.confirmToken(token)), HttpStatus.OK);
     }
 
